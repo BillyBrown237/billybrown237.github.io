@@ -1,2 +1,2 @@
 # my Portfolio
- here i will  codemy porfolio from scratch
+ here i will  code my porfolio from scratch
