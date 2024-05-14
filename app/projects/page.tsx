@@ -1,7 +1,8 @@
+import { ComingSoon } from "@/components/coming-soon/coming-soon"
 
 const Page = () => {
     return (
-        <p className='text-bold text-red-500 uppercase'>Parama</p>
+      <ComingSoon text="soon..."/>
     )
 }
 
