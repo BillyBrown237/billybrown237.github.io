@@ -43,16 +43,17 @@ jobs:
             exit 1
           fi
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install pnpm
         if: steps.detect-package-manager.outputs.manager == 'pnpm'
         run: |
           npm install -g pnpm
+          
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -64,6 +65,7 @@ jobs:
         with:
           path: |
             .next/cache
+            node_modules
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml', '**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml', '**/package-lock.json', '**/yarn.lock') }}-
