@@ -1,33 +1,22 @@
-Absolutely 🙂.
-Since your **main branch** will act as the **landing point** for your portfolio repository — where you showcase all your frontend projects built with different frameworks — your **README** should:
-
-1. **Introduce the portfolio**
-2. **Explain the repo structure** (branches = frameworks)
-3. **Provide live demo links** for each framework
-4. **Mention technologies used**
-5. **Give setup instructions** for contributors or recruiters who want to test locally
-
-Here’s a polished and professional **README.md** for your `main` branch:
-
----
-
 # **Billy Brown — Frontend Portfolio** 🚀
 
 Welcome to my **frontend portfolio showcase**!
 This repository contains different versions of my personal portfolio, each built with a **different JavaScript framework** to demonstrate my versatility and hands-on experience.
 
-🌍 **Live Demo:** [https://billybrown.com](https://billybrown.com)
+🌍 **Live Demo:** [https://billybrown237.github.io/](https:/billybrown237.github.io/)
 
 ---
 
 ## **📌 Frameworks & Live Demos**
 
-| Framework   | Branch    | Live Demo                                                | Tech Stack                  |
-| ----------- | --------- | -------------------------------------------------------- | --------------------------- |
-| **React**   | `react`   | [react.billybrown.com](https://react.billybrown.com)     | React, TypeScript, Tailwind |
-| **Angular** | `angular` | [angular.billybrown.com](https://angular.billybrown.com) | Angular, RxJS, SCSS         |
-| **Vue**     | `vue`     | [vue.billybrown.com](https://vue.billybrown.com)         | Vue 3, Pinia, Tailwind      |
-| **Svelte**  | `svelte`  | [svelte.billybrown.com](https://svelte.billybrown.com)   | SvelteKit, SCSS             |
+| Framework  | Branch    | Live Demo                                                | Tech Stack                               |
+|------------|-----------|----------------------------------------------------------|------------------------------------------|
+| **React**  | `react`   | [react.billybrown.com](https://react.billybrown.com)     | React,React Router, TypeScript, Tailwind |
+| **Nexts**  | `nextjs`  | [next.billybrown.com](https://next.billybrown.com)      | React,Nextjs, TypeScript, Tailwind       |
+| **Angular** | `angular` | [angular.billybrown.com](https://angular.billybrown.com) | Angular, RxJS, SCSS                      |
+| **Vue**    | `vue`     | [vue.billybrown.com](https://vue.billybrown.com)         | Vue 3, Pinia, Tailwind                   |
+| **Svelte** | `svelte`  | [svelte.billybrown.com](https://svelte.billybrown.com)   | SvelteKit, SCSS                          |
+| **Qwik**   | `qwik`    | [qwik.billybrown.com](https://qwik.billybrown.com)   | Qwik, SCSS                          |
 
 > ⚡ Each branch has its own codebase, optimized for the framework used.
 
@@ -36,12 +25,12 @@ This repository contains different versions of my personal portfolio, each built
 ## **🛠️ Tech Highlights**
 
 * **Languages:** TypeScript, JavaScript, HTML5, SCSS, CSS3
-* **Frameworks:** React, Angular, Vue, Svelte
+* **Frameworks:** React,NextJs Angular, Vue, Svelte, Qwik
 * **Styling:** TailwindCSS, Angular Material, SCSS
 * **State Management:** Redux, NgRx, Pinia, Signals
 * **Build Tools:** Vite, Webpack, Angular CLI
-* **Testing:** Vitest, Jest, Testing Library
-* **Deployment:** Vercel (with custom subdomains)
+* **Testing:** Vitest, Testing Library
+* **Deployment:** Vercel (with custom subdomains) , Netlify
 
 ---
 
@@ -51,9 +40,11 @@ This repository contains different versions of my personal portfolio, each built
 portfolio/
 ├── main/          # Landing page & README (this branch)
 ├── react/         # React version of portfolio
+├── nextjs/        # NextJs version of portfolio
 ├── angular/       # Angular version of portfolio
 ├── vue/           # Vue version of portfolio
 └── svelte/        # Svelte version of portfolio
+└── qwik/          # Qwik version of portfolio
 ```
 
 ---
