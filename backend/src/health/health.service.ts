@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class HealthService {
+  private readonly logger = new Logger(HealthService.name);
 
-  checkHealth(){
-    return {
+  checkHealth() {
+    const status = {
       status: 'ok',
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    };
+    return status;
   }
-  
 }

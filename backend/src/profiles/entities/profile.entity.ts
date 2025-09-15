@@ -1,5 +1,5 @@
 export class Profile {
-     id: string;
+  id: string;
   bio: string;
   profileImageUrl?: string;
   resumeUrl?: string;
