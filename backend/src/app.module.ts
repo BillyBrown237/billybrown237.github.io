@@ -11,7 +11,16 @@ import { AuthModule } from './auth/auth.module';
 import { SkillsModule } from './skills/skills.module';
 
 @Module({
-  imports: [HealthModule, ProfilesModule, ExperienceModule, TestimonialsModule, MessagesModule, CertificationsModule, AuthModule, SkillsModule, ],
+  imports: [
+    HealthModule,
+    ProfilesModule,
+    ExperienceModule,
+    TestimonialsModule,
+    MessagesModule,
+    CertificationsModule,
+    AuthModule,
+    SkillsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
