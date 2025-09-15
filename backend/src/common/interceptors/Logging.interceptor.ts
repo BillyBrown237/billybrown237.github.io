@@ -15,8 +15,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest<Request>();
-    const { method, url } = req;
+    const { method, url, body } = req;
     const startTime = Date.now();
+
+    // Only log body for POST/PUT/PATCH requests
+    const bodyToLog =
+      ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && body
+        ? JSON.stringify({ ...body, password: '[REDACTED]' })
+        : '';
 
     return next.handle().pipe(
       tap(() => {
@@ -24,28 +30,25 @@ export class LoggingInterceptor implements NestInterceptor {
         const statusCode = res.statusCode;
         const duration = Date.now() - startTime;
 
-        if (statusCode >= 400) {
-          this.logger.error(
-            `\x1b[31m${method} ${url} ${statusCode} - ${duration}ms\x1b[0m`,
-          );
+        // Color-coded logging
+        let message = `${method} ${url} ${statusCode} - ${duration}ms`;
+        if (bodyToLog) message += ` | Body: ${bodyToLog}`;
+
+        if (statusCode >= 500) {
+          this.logger.error(`\x1b[31m${message}\x1b[0m`); // red
+        } else if (statusCode >= 400) {
+          this.logger.warn(`\x1b[33m${message}\x1b[0m`); // yellow
         } else if (statusCode >= 300) {
-          this.logger.warn(
-            `\x1b[33m${method} ${url} ${statusCode} - ${duration}ms\x1b[0m`,
-          );
+          this.logger.log(`\x1b[36m${message}\x1b[0m`); // cyan for redirects
         } else {
-          this.logger.log(`${method} ${url} ${statusCode} - ${duration}ms`);
+          this.logger.log(`\x1b[32m${message}\x1b[0m`); // green for success
         }
       }),
       catchError((err: HttpException) => {
-        const res = context.switchToHttp().getResponse<Response>();
         const duration = Date.now() - startTime;
-        console.info('This is the res of the exception', res);
+        const message = `${method} ${url} 500 - ${duration}ms | Error: ${err.message}`;
 
-        // red text for exceptions
-        this.logger.error(
-          `\x1b[31m${method} ${url} 500 - ${duration}ms\x1b[0m`,
-          err.stack,
-        );
+        this.logger.error(`\x1b[31m${message}\x1b[0m`, err.stack);
 
         return throwError(() => err);
       }),
