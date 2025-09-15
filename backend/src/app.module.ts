@@ -9,6 +9,25 @@ import { MessagesModule } from './messages/messages.module';
 import { CertificationsModule } from './certifications/certifications.module';
 import { AuthModule } from './auth/auth.module';
 import { SkillsModule } from './skills/skills.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { envValidationSchema } from './common/schema/config.schema';
+import { UserModule } from './user/user.module';
+import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+
+const dataBaseProvider: TypeOrmModuleAsyncOptions = {
+  imports: [ConfigModule],
+  inject: [ConfigService],
+  useFactory: (configService: ConfigService) => ({
+    type: 'postgres',
+    host: configService.get<string>('DB_HOST'),
+    port: configService.get<number>('DB_PORT'),
+    username: configService.get<string>('DB_USERNAME'),
+    password: configService.get<string>('DB_PASSWORD'),
+    database: configService.get<string>('DB_NAME'),
+    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    synchronize: true,
+  }),
+};
 
 @Module({
   imports: [
@@ -19,7 +38,15 @@ import { SkillsModule } from './skills/skills.module';
     MessagesModule,
     CertificationsModule,
     AuthModule,
+    UserModule,
     SkillsModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      validationSchema: envValidationSchema,
+      validationOptions: { allowUnknown: true, abortEarly: true },
+    }),
+    TypeOrmModule.forRootAsync(dataBaseProvider),
   ],
   controllers: [AppController],
   providers: [AppService],
