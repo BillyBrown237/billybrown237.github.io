@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { UserRoles } from 'src/user/enum/user-role.enum';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -37,17 +44,14 @@ export class User {
   passwordHash: string;
   @Column({
     type: 'enum',
-    enum: ['admin', 'owner', 'viewer'],
-    default: 'viewer',
+    enum: UserRoles,
+    default: UserRoles.VIEWER,
   })
-  role: 'admin' | 'owner' | 'viewer';
+  role: UserRoles;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
+
+  @UpdateDateColumn()
   updatedAt: Date;
 }

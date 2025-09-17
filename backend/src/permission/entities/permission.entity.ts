@@ -1,5 +1,5 @@
 import {
-    Column,
+  Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
@@ -7,15 +7,15 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Testimonial {
+export class Permission {
   @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Column()
-  message: string;
+  @Column({ nullable: true })
+  description: string;
 
   @CreateDateColumn()
   createdAt: Date;
