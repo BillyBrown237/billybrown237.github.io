@@ -1,20 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Permission } from './entities/permission.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PermissionService {
-  create(createPermissionDto: CreatePermissionDto) {
+  constructor(
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
+  ) {}
 
-    return 'This action adds a new permission';
+  async create(createPermissionDto: CreatePermissionDto) {
+    const { name } = createPermissionDto;
+    const permission = await this.permissionRepository.findOne({
+      where: { name },
+    });
+    if (permission)
+      throw new ConflictException(
+        `Permission with name ${permission.name} already exists`,
+      );
+
+    const perm = this.permissionRepository.create(createPermissionDto);
+    return await this.permissionRepository.save(perm);
   }
 
-  findAll() {
-    return `This action returns all permission`;
+  async findAll() {
+    return await this.permissionRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} permission`;
+  async findOne(id: number) {
+    return await `This action returns a #${id} permission`;
   }
 
   update(id: number, updatePermissionDto: UpdatePermissionDto) {

@@ -8,7 +8,8 @@ import {
   Delete,
   ForbiddenException,
   Req,
-  ParseUUIDPipe, Put,
+  ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { TemporaryTokensService } from './temporary-tokens.service';
 import { CreateTemporaryTokenDto } from './dto/create-temporary-token.dto';

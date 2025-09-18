@@ -16,8 +16,8 @@ export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Post()
-  create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionService.create(createPermissionDto);
+  async create(@Body() createPermissionDto: CreatePermissionDto) {
+    return await this.permissionService.create(createPermissionDto);
   }
 
   @Get()

@@ -1,26 +1,33 @@
 import {
-  IsEmail,
   IsNotEmpty,
   IsString,
   Matches,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
+/**
+ * Data Transfer Object for creating a new admin user.
+ * This DTO ensures that the client cannot set the 'role' field.
+ * The role will be set to UserRoles.ADMIN on the backend.
+ */
 export class RegisterDto {
   @IsString()
   @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(255)
   username: string;
-
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(255)
   first_name: string;
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(255)
   last_name: string;
 
   @IsString()
