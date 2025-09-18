@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTemporaryTokenDto } from './dto/create-temporary-token.dto';
 import { UpdateTemporaryTokenDto } from './dto/update-temporary-token.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TemporaryToken } from './entities/temporary-token.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, In, Repository } from 'typeorm';
 import { Permission } from 'src/permission/entities/permission.entity';
 import { randomBytes } from 'crypto';
 
@@ -11,20 +15,24 @@ import { randomBytes } from 'crypto';
 export class TemporaryTokensService {
   constructor(
     @InjectRepository(TemporaryToken)
-    private repo: Repository<TemporaryToken>,
+    private readonly repo: Repository<TemporaryToken>,
     @InjectRepository(Permission)
-    private permissionRepo: Repository<Permission>,
+    private readonly permissionRepo: Repository<Permission>,
   ) {}
+
   async create(createTemporaryTokenDto: CreateTemporaryTokenDto) {
     const { permissionIds, timeToLiveInMinutes = 30 } = createTemporaryTokenDto;
-    const permissions = await this.permissionRepo.findByIds(permissionIds);
+    //Check if permission uuids sent exist
+    const permissions = await this.permissionRepo.findBy({
+      uuid: In(permissionIds),
+    });
     if (permissions.length !== permissionIds.length) {
       throw new BadRequestException('One or more permissions are invalid');
     }
     const token = randomBytes(16).toString('hex');
     const expiredAt = new Date(Date.now() + timeToLiveInMinutes * 60 * 1000);
     const tempToken = this.repo.create({ token, permissions, expiredAt });
-    return this.repo.save(tempToken);
+    return await this.repo.save(tempToken);
   }
 
   async validateToken(token: string) {
@@ -38,19 +46,89 @@ export class TemporaryTokensService {
     return record;
   }
 
-  findAll() {
-    return `This action returns all temporaryTokens`;
+  async findAll() {
+    return await this.repo.find({ relations: ['permissions'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} temporaryToken`;
+  async findOne(uuid: string) {
+    const result = await this.repo.findOne({
+      where: { uuid },
+      relations: ['permissions'],
+    });
+    if (!result) {
+      throw new NotFoundException(
+        `TemporaryToken with uuid "${uuid}" not found`,
+      );
+    }
+    return result;
   }
 
-  update(id: number, updateTemporaryTokenDto: UpdateTemporaryTokenDto) {
-    return `This action updates a #${id} temporaryToken`;
+  async patchUpdate(
+    uuid: string,
+    updateTemporaryTokenDto: UpdateTemporaryTokenDto,
+  ) {
+    const token = await this.findOne(uuid);
+
+    // Update permissions if provided
+    if (updateTemporaryTokenDto.permissionIds) {
+      const permissions = await this.permissionRepo.findBy({
+        uuid: In(updateTemporaryTokenDto.permissionIds),
+      });
+      if (permissions.length !== updateTemporaryTokenDto.permissionIds.length) {
+        throw new BadRequestException('One or more permissions are invalid');
+      }
+      const permissionMap = new Map<string, Permission>([
+        ...token.permissions.map((p) => [p.uuid, p] as [string, Permission]),
+        ...permissions.map((p) => [p.uuid, p] as [string, Permission]),
+      ]);
+      token.permissions = Array.from(permissionMap.values());
+    }
+
+    // Update TTL if provided
+    if (updateTemporaryTokenDto.timeToLiveInMinutes) {
+      token.expiredAt = new Date(
+        Date.now() + updateTemporaryTokenDto.timeToLiveInMinutes * 60 * 1000,
+      );
+    }
+
+    return await this.repo.save(token);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} temporaryToken`;
+  async putUpdate(
+    uuid: string,
+    updateTemporaryTokenDto: UpdateTemporaryTokenDto,
+  ) {
+    const token = await this.findOne(uuid);
+
+    if (updateTemporaryTokenDto.permissionIds) {
+      const permissions = await this.permissionRepo.findBy({
+        uuid: In(updateTemporaryTokenDto.permissionIds),
+      });
+
+      if (permissions.length !== updateTemporaryTokenDto.permissionIds.length) {
+        throw new BadRequestException('One or more permissions are invalid');
+      }
+
+      // Replace old permissions completely
+      token.permissions = permissions;
+    }
+
+    if (updateTemporaryTokenDto.timeToLiveInMinutes) {
+      token.expiredAt = new Date(
+        Date.now() + updateTemporaryTokenDto.timeToLiveInMinutes * 60 * 1000,
+      );
+    }
+
+    return await this.repo.save(token);
+  }
+
+  async remove(uuid: string): Promise<DeleteResult> {
+    const result = await this.repo.delete(uuid);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `TemporaryToken with uuid "${uuid}" not found`,
+      );
+    }
+    return result;
   }
 }

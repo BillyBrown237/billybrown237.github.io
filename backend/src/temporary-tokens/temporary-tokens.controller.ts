@@ -8,6 +8,7 @@ import {
   Delete,
   ForbiddenException,
   Req,
+  ParseUUIDPipe, Put,
 } from '@nestjs/common';
 import { TemporaryTokensService } from './temporary-tokens.service';
 import { CreateTemporaryTokenDto } from './dto/create-temporary-token.dto';
@@ -22,42 +23,54 @@ export class TemporaryTokensController {
   ) {}
 
   @Post()
-  create(
+  async create(
     @Body() createTemporaryTokenDto: CreateTemporaryTokenDto,
     @Req() req: Request,
   ) {
-
-    if (
-      req.auth.role !== UserRoles.ADMIN ||
-      req.auth.role !== UserRoles.OWNER
-    ) {
+    // const role = req?.auth?.role;
+    const role = UserRoles.ADMIN as UserRoles;
+    if (role !== UserRoles.ADMIN && role !== UserRoles.OWNER) {
       throw new ForbiddenException(
         `Only ${UserRoles.ADMIN} or ${UserRoles.OWNER} can generate token`,
       );
     }
-    return this.temporaryTokensService.create(createTemporaryTokenDto);
+    return await this.temporaryTokensService.create(createTemporaryTokenDto);
   }
 
   @Get()
-  findAll() {
-    return this.temporaryTokensService.findAll();
+  async findAll() {
+    return await this.temporaryTokensService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.temporaryTokensService.findOne(+id);
+  @Get(':uuid')
+  async findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return await this.temporaryTokensService.findOne(uuid);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Patch(':uuid')
+  async update(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() updateTemporaryTokenDto: UpdateTemporaryTokenDto,
   ) {
-    return this.temporaryTokensService.update(+id, updateTemporaryTokenDto);
+    return await this.temporaryTokensService.patchUpdate(
+      uuid,
+      updateTemporaryTokenDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.temporaryTokensService.remove(+id);
+  @Put(':uuid')
+  async replace(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Body() updateTemporaryTokenDto: UpdateTemporaryTokenDto,
+  ) {
+    return await this.temporaryTokensService.putUpdate(
+      uuid,
+      updateTemporaryTokenDto,
+    );
+  }
+
+  @Delete(':uuid')
+  async remove(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return await this.temporaryTokensService.remove(uuid);
   }
 }

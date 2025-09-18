@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
@@ -15,6 +16,7 @@ export class TemporaryToken {
   uuid: string;
 
   @Column({ unique: true })
+  @Index()
   token: string;
 
   @ManyToMany(() => Permission)
