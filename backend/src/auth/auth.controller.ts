@@ -8,10 +8,11 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { UserRoles } from '../user/enum/user-role.enum';
 import type { Request as RequestType } from 'express';
-import { AuthGuard } from '@nestjs/passport';
+import { User } from '../user/entities/user.entity';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,14 +27,26 @@ export class AuthController {
     return await this.authService.register(userPayload);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login/admin')
-  async login(@Body() loginDto: LoginDto) {
-    return await this.authService.login(loginDto);
+  login(@Request() request: RequestType) {
+    return this.authService.login(request.user as User);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(LocalAuthGuard)
+  @Post('logout/admin')
+  logout(@Request() request: RequestType) {
+    return request.logout((err) => {
+      if (err) {
+        throw err;
+      }
+      // handle successful logout
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('profile/admin')
-  profile(@Request() req: RequestType) {
-    return req.user;
+  async profile(@Request() req: RequestType) {
+    return await this.authService.findOne(req.user as User);
   }
 }

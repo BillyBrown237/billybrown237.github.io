@@ -1,15 +1,20 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -20,14 +25,46 @@ export class AuthService {
       throw new ConflictException(
         `User with username ${user.username} already exists`,
       );
-    const newAdmin = this.userRepository.create(registerDto);
+    const { password, ...rest } = registerDto;
+    // Hashing the user password
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    const newAdmin = this.userRepository.create({
+      ...rest,
+      passwordHash: passwordHash,
+    });
     return await this.userRepository.save(newAdmin);
   }
 
-  async login(loginDto: LoginDto) {
-    console.info(loginDto);
-    return await `This action returns all auth`;
+  login(user: User) {
+    const payload = {
+      username: user.username,
+      sub: user.uuid,
+      role: user.role,
+    };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
+  async findOne(user: User) {
+    const admin = await this.userRepository.findOne({
+      where: { uuid: user.uuid },
+    });
+    if (!admin) {
+      throw new NotFoundException(`User with ID ${user.uuid} not found`);
+    }
+    return admin;
+  }
 
+  async validateUser(loginDto: LoginDto) {
+    const user = await this.userService.findByUsername(loginDto.username);
+    if (!user) return null;
+
+    const isMatch = await bcrypt.compare(loginDto.password, user.passwordHash);
+    if (!isMatch) return null;
+    const { passwordHash, ...result } = user;
+    return result;
+  }
 }
