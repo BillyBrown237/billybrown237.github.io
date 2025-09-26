@@ -37,7 +37,7 @@ export class UserController {
     @Body() createUserDto: CreateUserDto,
     @Request() request: RequestType,
   ) {
-    console.info('Request User', request.user);
+
     if ((request.user as User).role !== UserRoles.ADMIN) {
       throw new UnauthorizedException();
     }
