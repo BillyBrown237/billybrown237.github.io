@@ -1,26 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 import { UpdateExperienceDto } from './dto/update-experience.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Experience } from './entities/experience.entity';
 
 @Injectable()
 export class ExperienceService {
-  create(createExperienceDto: CreateExperienceDto) {
-    return 'This action adds a new experience';
+  constructor(
+    @InjectRepository(Experience)
+    private readonly repo: Repository<Experience>,
+  ) {}
+
+  async create(dto: CreateExperienceDto) {
+    const toCreate: Partial<Experience> = {
+      title: dto.title,
+      company: dto.company,
+      startDate: new Date(dto.startDate),
+      endDate: dto.endDate ? new Date(dto.endDate) : null,
+      description: dto.description ?? null,
+      status: dto.status,
+    };
+    const entity = this.repo.create(toCreate);
+    return await this.repo.save(entity);
   }
 
-  findAll() {
-    return `This action returns all experience`;
+  async findAll() {
+    return await this.repo.find({ order: { createdAt: 'DESC' } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} experience`;
+  async findOne(uuid: string) {
+    const entity = await this.repo.findOne({ where: { uuid } });
+    if (!entity) throw new NotFoundException(`Experience with id ${uuid} not found`);
+    return entity;
   }
 
-  update(id: number, updateExperienceDto: UpdateExperienceDto) {
-    return `This action updates a #${id} experience`;
+  async update(uuid: string, dto: UpdateExperienceDto) {
+    const existing = await this.findOne(uuid);
+    const merged = this.repo.merge(existing, {
+      ...dto,
+      startDate: dto.startDate ? new Date(dto.startDate) : existing.startDate,
+      endDate: dto.endDate ? new Date(dto.endDate) : existing.endDate,
+    } as any);
+    return await this.repo.save(merged);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} experience`;
+  async remove(uuid: string) {
+    const entity = await this.findOne(uuid);
+    await this.repo.remove(entity);
+    return { deleted: true };
   }
 }
