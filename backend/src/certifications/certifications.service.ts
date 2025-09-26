@@ -13,7 +13,7 @@ export class CertificationsService {
   ) {}
 
   async create(createCertificationDto: CreateCertificationDto) {
-    console.info('Payload', createCertificationDto);
+
     const toCreate: Partial<Certification> = {
       ...createCertificationDto,
       // Ensure dateIssued is a Date instance

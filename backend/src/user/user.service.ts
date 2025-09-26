@@ -43,8 +43,8 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.userRepository.find();
   }
 
   async findOne(uuid: string) {
@@ -64,7 +64,10 @@ export class UserService {
   }
 
   async update(uuid: string, updateUserDto: UpdateUserDto) {
-    return await this.findOne(uuid);
+    const user = await this.findOne(uuid);
+    // Handle password hashing if password is being updated
+    const updatedUser = this.userRepository.merge(user, updateUserDto);
+    return await this.userRepository.save(updatedUser);
   }
 
   remove(uuid: string) {

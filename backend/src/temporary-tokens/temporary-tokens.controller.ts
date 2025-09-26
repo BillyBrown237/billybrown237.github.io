@@ -8,13 +8,11 @@ import {
   Patch,
   Post,
   Put,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { TemporaryTokensService } from './temporary-tokens.service';
 import { CreateTemporaryTokenDto } from './dto/create-temporary-token.dto';
 import { UpdateTemporaryTokenDto } from './dto/update-temporary-token.dto';
-import type { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/permissions.decorator';
@@ -37,14 +35,13 @@ export class TemporaryTokensController {
     private readonly temporaryTokensService: TemporaryTokensService,
   ) {}
 
-  @ApiOperation({ summary: 'Create a one-time temporary token with permissions' })
+  @ApiOperation({
+    summary: 'Create a one-time temporary token with permissions',
+  })
   @ApiCreatedResponse({ description: 'Temporary token created successfully' })
   @Permissions(AppPermission.PermissionManage)
   @Post()
-  async create(
-    @Body() createTemporaryTokenDto: CreateTemporaryTokenDto,
-    @Req() req: Request,
-  ) {
+  async create(@Body() createTemporaryTokenDto: CreateTemporaryTokenDto) {
     return await this.temporaryTokensService.create(createTemporaryTokenDto);
   }
 
@@ -58,7 +55,11 @@ export class TemporaryTokensController {
 
   @ApiOperation({ summary: 'Get a temporary token by UUID' })
   @ApiOkResponse({ description: 'Temporary token details' })
-  @ApiParam({ name: 'uuid', description: 'Temporary token UUID', type: 'string' })
+  @ApiParam({
+    name: 'uuid',
+    description: 'Temporary token UUID',
+    type: 'string',
+  })
   @Permissions(AppPermission.PermissionManage)
   @Get(':uuid')
   async findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
