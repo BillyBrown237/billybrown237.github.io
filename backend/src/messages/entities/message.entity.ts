@@ -1,8 +1,28 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+@Entity()
 export class Message {
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  uuid: string;
+
+  @Column()
   name: string;
+
+  @Column()
   email: string;
-  subject?: string;
-  body: string;
+
+  @Column({ type: 'text' })
+  content: string;
+
+  @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

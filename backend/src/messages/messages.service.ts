@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Message } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
+  constructor(
+    @InjectRepository(Message)
+    private readonly repo: Repository<Message>,
+  ) {}
+
+  async create(dto: CreateMessageDto) {
+    const entity = this.repo.create({
+      name: dto.name,
+      email: dto.email,
+      content: dto.content,
+    });
+    return await this.repo.save(entity);
   }
 
-  findAll() {
-    return `This action returns all messages`;
+  async findAll() {
+    return await this.repo.find({ order: { createdAt: 'DESC' } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
+  async findOne(uuid: string) {
+    const entity = await this.repo.findOne({ where: { uuid } });
+    if (!entity) throw new NotFoundException(`Message with id ${uuid} not found`);
+    return entity;
   }
 
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
+  async update(uuid: string, dto: UpdateMessageDto) {
+    const existing = await this.repo.findOne({ where: { uuid } });
+    if (!existing) throw new NotFoundException(`Message with id ${uuid} not found`);
+    const merged = this.repo.merge(existing, dto);
+    return await this.repo.save(merged);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} message`;
+  async remove(uuid: string) {
+    const existing = await this.repo.findOne({ where: { uuid } });
+    if (!existing) throw new NotFoundException(`Message with id ${uuid} not found`);
+    await this.repo.remove(existing);
+    return { deleted: true } as const;
   }
 }

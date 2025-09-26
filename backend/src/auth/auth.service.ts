@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { TokenPayloadI } from './token-payload.interface';
+import { TemporaryTokensService } from '../temporary-tokens/temporary-tokens.service';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +25,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly tempTokensService: TemporaryTokensService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -86,6 +88,38 @@ export class AuthService {
       throw new NotFoundException(`User with ID ${user.uuid} not found`);
     }
     return admin;
+  }
+
+  async tempLogin(token: string, response: Response) {
+    const record = await this.tempTokensService.validateToken(token);
+    if (!record) {
+      throw new UnauthorizedException('Invalid or expired temporary token');
+    }
+
+    const permissions = record.permissions?.map((p) => p.name) ?? [];
+
+    const expiresAccessToken = new Date(record.expiredAt);
+
+    const payload: TokenPayloadI = {
+      temp: true,
+      permissions,
+      tempTokenId: record.uuid,
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: Math.max(1, expiresAccessToken.getTime() - Date.now()) + 'ms',
+    });
+
+    response.cookie('Authentication', accessToken, {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      sameSite: 'lax',
+      expires: expiresAccessToken,
+    });
+
+    // mark token as used
+    await this.tempTokensService.markUsed(record.uuid);
   }
 
   async validateUser(loginDto: LoginDto) {

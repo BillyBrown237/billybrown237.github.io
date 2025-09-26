@@ -25,7 +25,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: TokenPayloadI) {
-    console.log('Payload', payload);
+    // If this is a temporary permission token, return the payload as the principal
+    if (payload?.temp) {
+      return payload;
+    }
+    if (!payload?.uuid) return null;
     return await this.userService.findOne(payload.uuid);
   }
 }
