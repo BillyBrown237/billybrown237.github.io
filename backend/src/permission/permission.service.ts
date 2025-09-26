@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,15 +34,23 @@ export class PermissionService {
     return await this.permissionRepository.find();
   }
 
-  async findOne(id: number) {
-    return await `This action returns a #${id} permission`;
+  async findOne(uuid: string) {
+    const perm = await this.permissionRepository.findOne({ where: { uuid } });
+    if (!perm) throw new NotFoundException('Permission not found');
+    return perm;
   }
 
-  update(id: number, updatePermissionDto: UpdatePermissionDto) {
-    return `This action updates a #${id} permission`;
+  async update(uuid: string, updatePermissionDto: UpdatePermissionDto) {
+    const perm = await this.permissionRepository.findOne({ where: { uuid } });
+    if (!perm) throw new NotFoundException('Permission not found');
+    Object.assign(perm, updatePermissionDto);
+    return await this.permissionRepository.save(perm);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} permission`;
+  async remove(uuid: string) {
+    const perm = await this.permissionRepository.findOne({ where: { uuid } });
+    if (!perm) throw new NotFoundException('Permission not found');
+    await this.permissionRepository.remove(perm);
+    return { success: true };
   }
 }

@@ -30,7 +30,10 @@ async function bootstrap() {
       .setDescription('Api Documentation for my portfolio')
       .setVersion('1.0')
       .addTag('portfolio')
-      .addBearerAuth()
+      .addCookieAuth('Authentication', {
+        type: 'apiKey',
+        in: 'cookie',
+      })
       .build();
 
     const documentFactory = () => SwaggerModule.createDocument(app, config);

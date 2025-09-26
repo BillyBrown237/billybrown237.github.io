@@ -9,5 +9,6 @@ import { Permission } from '../permission/entities/permission.entity';
   imports: [TypeOrmModule.forFeature([TemporaryToken, Permission])],
   controllers: [TemporaryTokensController],
   providers: [TemporaryTokensService],
+  exports: [TemporaryTokensService],
 })
 export class TemporaryTokensModule {}

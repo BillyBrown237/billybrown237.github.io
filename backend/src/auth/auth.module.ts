@@ -8,10 +8,12 @@ import { UserModule } from '../user/user.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TemporaryTokensModule } from '../temporary-tokens/temporary-tokens.module';
 
 @Module({
   imports: [
     UserModule,
+    TemporaryTokensModule,
     TypeOrmModule.forFeature([User]),
     ConfigModule,
     JwtModule.registerAsync({

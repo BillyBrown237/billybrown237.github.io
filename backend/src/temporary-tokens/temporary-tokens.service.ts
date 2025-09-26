@@ -131,4 +131,10 @@ export class TemporaryTokensService {
     }
     return result;
   }
+
+  async markUsed(uuid: string) {
+    const token = await this.findOne(uuid);
+    token.used = true;
+    return await this.repo.save(token);
+  }
 }
