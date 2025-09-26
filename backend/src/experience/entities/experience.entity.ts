@@ -1,8 +1,37 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+@Entity()
 export class Experience {
-  id: string;
-  title: string; // e.g. "Frontend Developer"
-  company: string; // e.g. "Freelance"
+  @PrimaryGeneratedColumn('uuid')
+  uuid: string;
+
+  @Column({ type: 'varchar', length: 200 })
+  title: string;
+
+  @Column({ type: 'varchar', length: 200 })
+  company: string;
+
+  @Column({ type: 'timestamp with time zone' })
   startDate: Date;
-  endDate?: Date; // null if ongoing
-  description: string;
+
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  endDate?: Date | null;
+
+  @Column({ type: 'text', nullable: true })
+  description?: string | null;
+
+  @Column({ type: 'varchar', length: 50 })
+  status: string;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

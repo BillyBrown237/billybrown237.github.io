@@ -13,6 +13,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { envValidationSchema } from './common/schema/config.schema';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { User } from './user/entities/user.entity';
+import { TemporaryTokensModule } from './temporary-tokens/temporary-tokens.module';
+import { PermissionModule } from './permission/permission.module';
+import { TemporaryToken } from './temporary-tokens/entities/temporary-token.entity';
+import { Permission } from './permission/entities/permission.entity';
+import { Certification } from './certifications/entities/certification.entity';
 
 const dataBaseProvider: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -24,7 +30,8 @@ const dataBaseProvider: TypeOrmModuleAsyncOptions = {
     username: configService.get<string>('DB_USERNAME'),
     password: configService.get<string>('DB_PASSWORD'),
     database: configService.get<string>('DB_NAME'),
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    entities: [User, TemporaryToken, Permission, Certification],
     synchronize: true,
   }),
 };
@@ -40,6 +47,8 @@ const dataBaseProvider: TypeOrmModuleAsyncOptions = {
     AuthModule,
     UserModule,
     SkillsModule,
+    TemporaryTokensModule,
+    PermissionModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
