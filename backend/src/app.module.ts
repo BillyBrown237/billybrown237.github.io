@@ -18,6 +18,7 @@ import { TemporaryTokensModule } from './temporary-tokens/temporary-tokens.modul
 import { PermissionModule } from './permission/permission.module';
 import { TemporaryToken } from './temporary-tokens/entities/temporary-token.entity';
 import { Permission } from './permission/entities/permission.entity';
+import { Certification } from './certifications/entities/certification.entity';
 
 const dataBaseProvider: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -30,7 +31,7 @@ const dataBaseProvider: TypeOrmModuleAsyncOptions = {
     password: configService.get<string>('DB_PASSWORD'),
     database: configService.get<string>('DB_NAME'),
     // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    entities: [User, TemporaryToken, Permission],
+    entities: [User, TemporaryToken, Permission, Certification],
     synchronize: true,
   }),
 };

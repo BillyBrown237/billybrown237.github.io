@@ -1,22 +1,30 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Request,
+  Patch,
+  Post,
+  UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import type { Request as RequestType } from 'express';
+import { User } from './entities/user.entity';
+import { UserRoles } from './enum/user-role.enum';
 
 @ApiTags('users')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
@@ -24,8 +32,15 @@ export class UserController {
     description: 'The user has been successfully created.',
   })
   @ApiResponse({ status: 400, description: 'Invalid input.' })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @Request() request: RequestType,
+  ) {
+    console.info('Request User', request.user);
+    if ((request.user as User).role !== UserRoles.ADMIN) {
+      throw new UnauthorizedException();
+    }
+    return await this.userService.create(createUserDto);
   }
 
   @Get()

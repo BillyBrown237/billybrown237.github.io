@@ -10,8 +10,9 @@ export class CreateCertificationDto {
   @IsNotEmpty()
   issuer: string;
 
+  // Accept ISO-8601 date string
   @IsDateString()
-  dateIssued: Date;
+  dateIssued: string;
 
   @IsEnum(CertificationStatus)
   status: CertificationStatus;

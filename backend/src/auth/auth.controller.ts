@@ -5,14 +5,16 @@ import {
   Get,
   Request,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserRoles } from '../user/enum/user-role.enum';
-import type { Request as RequestType } from 'express';
+import type { Request as RequestType, Response } from 'express';
 import { User } from '../user/entities/user.entity';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { CurrentUser } from './current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -29,8 +31,11 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login/admin')
-  login(@Request() request: RequestType) {
-    return this.authService.login(request.user as User);
+  login(
+    @CurrentUser() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.login(user, response);
   }
 
   @UseGuards(LocalAuthGuard)
