@@ -31,7 +31,8 @@ export class ExperienceService {
 
   async findOne(uuid: string) {
     const entity = await this.repo.findOne({ where: { uuid } });
-    if (!entity) throw new NotFoundException(`Experience with id ${uuid} not found`);
+    if (!entity)
+      throw new NotFoundException(`Experience with id ${uuid} not found`);
     return entity;
   }
 
@@ -41,7 +42,7 @@ export class ExperienceService {
       ...dto,
       startDate: dto.startDate ? new Date(dto.startDate) : existing.startDate,
       endDate: dto.endDate ? new Date(dto.endDate) : existing.endDate,
-    } as any);
+    });
     return await this.repo.save(merged);
   }
 

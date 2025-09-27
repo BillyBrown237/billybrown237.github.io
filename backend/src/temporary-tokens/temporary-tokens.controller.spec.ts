@@ -11,7 +11,9 @@ describe('TemporaryTokensController', () => {
       providers: [TemporaryTokensService],
     }).compile();
 
-    controller = module.get<TemporaryTokensController>(TemporaryTokensController);
+    controller = module.get<TemporaryTokensController>(
+      TemporaryTokensController,
+    );
   });
 
   it('should be defined', () => {

@@ -13,7 +13,13 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCookieAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { Request as RequestType } from 'express';
 import { User } from './entities/user.entity';
@@ -37,7 +43,6 @@ export class UserController {
     @Body() createUserDto: CreateUserDto,
     @Request() request: RequestType,
   ) {
-
     if ((request.user as User).role !== UserRoles.ADMIN) {
       throw new UnauthorizedException();
     }

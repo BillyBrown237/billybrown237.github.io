@@ -10,6 +10,10 @@ import { User } from '../../user/entities/user.entity';
 import { Request } from 'express';
 import { TokenPayloadI } from '../token-payload.interface';
 
+export type Principal =
+  | (User | (TokenPayloadI & { permissions?: string[] }))
+  | undefined;
+
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
@@ -26,9 +30,7 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<Request>();
-    const principal = request.user as
-      | (User | (TokenPayloadI & { permissions?: string[] }))
-      | undefined;
+    const principal = request.user as Principal;
 
     if (!principal) {
       throw new ForbiddenException('No authenticated user found');
@@ -36,12 +38,19 @@ export class PermissionsGuard implements CanActivate {
 
     // If the principal carries explicit permissions (temporary token), use them
     let allowed: readonly string[] = [];
-    const tempPerms = (principal as any)?.permissions as string[] | undefined;
-    if (Array.isArray(tempPerms)) {
-      allowed = tempPerms;
-    } else {
-      const role = (principal as User).role;
+    if (
+      principal &&
+      'permissions' in principal &&
+      Array.isArray(principal.permissions)
+    ) {
+      // Temporary token with explicit permissions
+      allowed = principal.permissions;
+    } else if (principal && 'role' in principal) {
+      // Regular user with a role
+      const role = principal.role as keyof typeof RolePermissions;
       allowed = RolePermissions[role] ?? [];
+    } else {
+      throw new ForbiddenException('Invalid principal object');
     }
 
     const hasAll = required.every((perm) => allowed.includes(perm));

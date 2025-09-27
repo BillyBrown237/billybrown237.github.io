@@ -17,7 +17,14 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/permissions.decorator';
 import { AppPermission } from '../auth/permissions.constants';
-import { ApiCookieAuth, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('experience')
 @Controller('experience')

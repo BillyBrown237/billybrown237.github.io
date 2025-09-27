@@ -1,4 +1,12 @@
-import { IsArray, IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { ProjectStatus } from '../enum/project-status.enum';
 
 export class CreateProjectDto {

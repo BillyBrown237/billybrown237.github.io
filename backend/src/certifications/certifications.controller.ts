@@ -37,7 +37,6 @@ export class CertificationsController {
   @Permissions(AppPermission.CertificationsCreate)
   @Post()
   create(@Body() createCertificationDto: CreateCertificationDto) {
-
     return this.certificationsService.create(createCertificationDto);
   }
 

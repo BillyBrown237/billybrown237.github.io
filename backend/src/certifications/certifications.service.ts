@@ -13,7 +13,6 @@ export class CertificationsService {
   ) {}
 
   async create(createCertificationDto: CreateCertificationDto) {
-
     const toCreate: Partial<Certification> = {
       ...createCertificationDto,
       // Ensure dateIssued is a Date instance
