@@ -11,7 +11,7 @@ export const NAV_LINKS = [
 export const EXTERNAL_LINKS = {
     GITHUB: 'https://github.com/billybrown237',
     GITLAB: 'https://github.com/billybrown237',
-    LINKEDIN: 'https://linkedin.com/in/kdbbrown',
+    LINKEDIN: 'https://linkedin.com/in/dbillybrown',
     LINKTREE: 'https://linktr.ee/kano_dekou',
     GITHUB_REPO: 'https://github.com/BillyBrown237/billybrown237.github.io',
     TWITTER: 'https://twitter.com/shahsagarm',
