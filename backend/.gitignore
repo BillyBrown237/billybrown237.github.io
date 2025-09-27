@@ -45,3 +45,4 @@ coverage/
 *.pnp.*
 *.pnp.js
 *.pnp.cjs
+/client/
