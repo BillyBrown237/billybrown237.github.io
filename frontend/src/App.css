@@ -114,7 +114,31 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply scroll-smooth
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  h1{
+    @apply text-4xl leading-8 font-semibold md:font-bold md:text-5xl md:leading-10 md:tracking-[-2%] lg:text-6xl lg:leading-16
+  }
+  h2{
+    @apply text-[24px] leading-9 font-semibold tracking-[-2%] lg:text-4xl lg:leading-10
+  }
+  h3{
+    @apply text-[18px] leading-7 tracking-[-2%] lg:text-3xl lg:leading-9
+  }
+  h4{
+    @apply text-[18px] leading-7 tracking-[-2%] lg:text-xl
+  }
+  h5{
+    @apply text-base leading-6 tracking-[-2%] lg:text-lg lg:leading-7
+  }
+  h6{
+    @apply text-base leading-6 tracking-[-2%]
+  }
+  p{
+    @apply text-sm leading-5 tracking-[-2%]
   }
 }

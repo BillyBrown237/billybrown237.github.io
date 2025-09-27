@@ -1,24 +1,25 @@
 import './App.css'
-import {NavLink} from "react-router";
+import {About} from "@/pages/client/about.tsx";
+import {Hero} from "@/pages/client/hero.tsx";
+import {Skills} from "@/pages/client/skills.tsx";
+import {Experiences} from "@/pages/client/experiences.tsx";
+import {Work} from "@/pages/client/work.tsx";
+import {Testimonials} from "@/pages/client/testimonials.tsx";
+import {Contact} from "@/pages/client/contact.tsx";
 
 function App() {
 
 
     return (
-        <>
-            <h1 className={'text-3xl'}>Hello World</h1>
-            <nav>
-                {/* NavLink makes it easy to show active states */}
-                <NavLink
-                    to="/login"
-                    className={({isActive}) =>
-                        isActive ? "active" : ""
-                    }
-                >
-                    Home
-                </NavLink>
-            </nav>
-        </>
+        <div>
+            <Hero/>
+            <About/>
+            <Skills/>
+            <Experiences/>
+            <Work/>
+            <Testimonials />
+            <Contact />
+        </div>
     )
 }
 

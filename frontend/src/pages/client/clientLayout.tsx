@@ -1,14 +1,15 @@
 import {Outlet} from "react-router";
+import {Header} from "@/components/header.tsx";
+import {Footer} from "@/components/footer.tsx";
 
 export const ClientLayout = () => {
     return (
-        <>
-            <header className="auth-layout">header if any</header>
-            <main className="auth-layout">
-                <Outlet />
+        <section className='flex flex-col h-full items-center justify-between'>
+            <Header/>
+            <main className="flex-1 w-full border flex items-center justify-center">
+                <Outlet/>
             </main>
-            <footer className="auth-layout">footer if any
-            </footer>
-        </>
+            <Footer/>
+        </section>
     )
 }
