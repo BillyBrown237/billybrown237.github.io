@@ -14,7 +14,7 @@ export const Header = () => {
 
     console.log(location)
     return (
-        <header className="shadow-sm w-full p-4 md:px-8">
+        <header className="w-full p-4 md:px-8">
             <nav className='flex items-center justify-between mx-auto w-full max-w-7xl '>
                <Logo />
                 <div className='hidden md:flex'>
