@@ -13,6 +13,8 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { TemporaryTokensModule } from './temporary-tokens/temporary-tokens.module';
 import { PermissionModule } from './permission/permission.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const dataBaseProvider: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -49,6 +51,13 @@ const dataBaseProvider: TypeOrmModuleAsyncOptions = {
       validationOptions: { allowUnknown: true, abortEarly: true },
     }),
     TypeOrmModule.forRootAsync(dataBaseProvider),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      exclude: ['/api/{*test}'],
+      serveStaticOptions: {
+        fallthrough: false,
+      },
+    }),
   ],
   controllers: [],
   providers: [],
