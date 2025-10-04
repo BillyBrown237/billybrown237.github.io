@@ -3,10 +3,8 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui";
 import {TempTokenLoginForm} from "@/forms/tempTokenLoginForm.tsx";
 
 export const Login = () => {
-
-
     return (
-        <section className="flex w-full max-w-sm flex-col gap-6">
+        <section className="flex w-full h-dvh items-center justify-center border max-w-sm gap-6">
             <Tabs defaultValue="username" className="w-[400px]">
                 <TabsList>
                     <TabsTrigger value="username">Username</TabsTrigger>

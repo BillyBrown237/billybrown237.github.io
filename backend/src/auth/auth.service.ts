@@ -1,10 +1,7 @@
 import {
-  ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
@@ -15,7 +12,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { TokenPayloadI } from './token-payload.interface';
-import { TemporaryTokensService } from '../temporary-tokens/temporary-tokens.service';
 
 @Injectable()
 export class AuthService {
@@ -25,28 +21,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly tempTokensService: TemporaryTokensService,
   ) {}
-
-  async register(registerDto: RegisterDto) {
-    const user = await this.userRepository.findOne({
-      where: { username: registerDto.username },
-    });
-    if (user)
-      throw new ConflictException(
-        `User with username ${user.username} already exists`,
-      );
-    const { password, ...rest } = registerDto;
-    // Hashing the user password
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
-
-    const newAdmin = this.userRepository.create({
-      ...rest,
-      passwordHash: passwordHash,
-    });
-    return await this.userRepository.save(newAdmin);
-  }
 
   login(user: User, response: Response) {
     if (!user) {
@@ -78,48 +53,21 @@ export class AuthService {
       sameSite: 'lax',
       expires: expiresAccessToken,
     });
+    return { message: 'Login successful' };
   }
 
-  async findOne(user: User) {
-    const admin = await this.userRepository.findOne({
-      where: { uuid: user.uuid },
-    });
-    if (!admin) {
-      throw new NotFoundException(`User with ID ${user.uuid} not found`);
-    }
-    return admin;
-  }
-
-  async tempLogin(token: string, response: Response) {
-    const record = await this.tempTokensService.validateToken(token);
-    if (!record) {
-      throw new UnauthorizedException('Invalid or expired temporary token');
-    }
-
-    const permissions = record.permissions?.map((p) => p.name) ?? [];
-
-    const expiresAccessToken = new Date(record.expiredAt);
-
-    const payload: TokenPayloadI = {
-      temp: true,
-      permissions,
-      tempTokenId: record.uuid,
-    };
-
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: Math.max(1, expiresAccessToken.getTime() - Date.now()) + 'ms',
-    });
-
-    response.cookie('Authentication', accessToken, {
+  logout(res: Response) {
+    res.clearCookie('Authentication', {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
+      secure: false,
       sameSite: 'lax',
-      expires: expiresAccessToken,
     });
+    return { success: true } as const;
+  }
 
-    // mark token as used
-    await this.tempTokensService.markUsed(record.uuid);
+  profile(user: User) {
+    const { passwordHash: _passwordHash, ...result } = user;
+    return result;
   }
 
   async validateUser(loginDto: LoginDto) {

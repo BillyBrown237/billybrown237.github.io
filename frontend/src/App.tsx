@@ -3,7 +3,7 @@ import {About} from "@/pages/client/about.tsx";
 import {Hero} from "@/pages/client/hero.tsx";
 import {Skills} from "@/pages/client/skills.tsx";
 import {Experiences} from "@/pages/client/experiences.tsx";
-import {Work} from "@/pages/client/work.tsx";
+import {Projects} from "@/pages/client/projects.tsx";
 import {Testimonials} from "@/pages/client/testimonials.tsx";
 import {Contact} from "@/pages/client/contact.tsx";
 
@@ -16,7 +16,7 @@ function App() {
             <About/>
             <Skills/>
             <Experiences/>
-            <Work/>
+            <Projects/>
             <Testimonials />
             <Contact />
         </div>

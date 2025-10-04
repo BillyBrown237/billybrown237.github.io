@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { HealthModule } from './health/health.module';
-import { ProfilesModule } from './profiles/profiles.module';
 import { ExperienceModule } from './experience/experience.module';
 import { TestimonialsModule } from './testimonials/testimonials.module';
 import { MessagesModule } from './messages/messages.module';
@@ -34,7 +33,6 @@ const dataBaseProvider: TypeOrmModuleAsyncOptions = {
 @Module({
   imports: [
     HealthModule,
-    ProfilesModule,
     ExperienceModule,
     TestimonialsModule,
     MessagesModule,

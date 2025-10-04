@@ -2,7 +2,7 @@
 
 export const NAV_LINKS = [
     { label: "About", href: "#about", type: "anchor" },
-    { label: "Work", href: "#work", type: "anchor" },
+    { label: "Projects", href: "#work", type: "anchor" },
     { label: "Testimonials", href: "#testimonials", type: "anchor" },
     { label: "Contact", href: "#contact", type: "anchor" },
     { label: "Login", href: "/login", type: "route" },

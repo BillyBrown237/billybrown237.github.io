@@ -1,18 +1,23 @@
-import {BrowserRouter, Routes} from "react-router";
-import { useClientRoutes} from "@/routes/clientRoutes.tsx";
-import {useDashboardRoutes} from "@/routes/dashboardRoutes.tsx";
+import { createBrowserRouter } from "react-router"
+import { NotFoundPage } from "@/pages/not-found-page"
+import {ClientLayout} from "@/pages/client/clientLayout.tsx";
+import {clientRoutes} from "@/routes/clientRoutes.tsx";
+import {dashboardRoutes} from "@/routes/dashboardRoutes.tsx";
+import {Login} from "@/pages/client/auth/login.tsx";
 
-export const AppRoutes = () => {
-    const ClientRoutes = useClientRoutes();
-    const DashboardRoutes = useDashboardRoutes();
-
-    return (
-        <BrowserRouter>
-        <Routes>
-            {ClientRoutes}
-            {DashboardRoutes}
-        </Routes>
-        </BrowserRouter>
-    )
-
-}
+export const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <ClientLayout />,
+        children: clientRoutes,
+    },
+    {
+        path:'/login',
+        element: <Login />
+    },
+    dashboardRoutes,
+    {
+        path: "*",
+        element: <NotFoundPage />,
+    },
+])

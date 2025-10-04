@@ -7,7 +7,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
@@ -17,6 +18,13 @@ async function bootstrap() {
       prefix: 'Billy Potfolio',
     }),
   });
+
+  app.enableCors({
+    origin: ['http://localhost:5173', 'https://your-portfolio.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true, // if using cookies or auth headers
+  });
+
   app.setGlobalPrefix('api');
 
   // Access ConfigService
@@ -37,8 +45,13 @@ async function bootstrap() {
       })
       .build();
 
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, documentFactory);
+    const document = SwaggerModule.createDocument(app, config);
+    app.use(
+      '/reference',
+      apiReference({
+        content: document,
+      }),
+    );
   }
 
   app.useGlobalInterceptors(new LoggingInterceptor());
