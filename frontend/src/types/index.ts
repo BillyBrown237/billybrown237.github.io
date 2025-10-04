@@ -47,14 +47,7 @@ export interface Experience {
     current: boolean
 }
 
-export interface Certification {
-    id: string
-    name: string
-    issuer: string
-    issueDate: string
-    credentialId?: string
-    credentialUrl?: string
-}
+
 
 export interface Skill {
     id: string
