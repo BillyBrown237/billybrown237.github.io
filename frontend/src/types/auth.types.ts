@@ -27,3 +27,11 @@ export interface UpdateUserDto {
     resumeUrl?: string
     socials?: Record<string, string>
 }
+
+
+export interface LoginError {
+    error: string
+    message: string
+    statusCode: number
+}
+
