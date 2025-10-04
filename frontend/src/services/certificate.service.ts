@@ -3,7 +3,7 @@ import type {
     Certification,
     CreateCertificationDto,
     UpdateCertificationDto,
-} from "@/types/certificate"
+} from "@/types/certification.types.ts"
 
 export const certificationService = {
     // Get all certifications

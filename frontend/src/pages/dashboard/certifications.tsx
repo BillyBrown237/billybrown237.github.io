@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Plus, Pencil, Trash2, Award } from "lucide-react"
 import { Table, TableBody, TableCell,Button, TableHead, TableHeader, TableRow } from "@/components/ui"
 import { Badge } from "@/components/ui/badge"
-import type { Certification, CreateCertificationDto, CertificationStatus } from "@/types/certificate.ts"
+import type { Certification, CreateCertificationDto, CertificationStatus } from "@/types/certification.types.ts"
 import {CertificationFormDialog} from "@/components/certifications/ceritification-form-dialog.tsx";
 import {DeleteCertificationDialog} from "@/components/certifications/delete-certificate-dialog.tsx";
 import {certificationService} from "@/services/certificate.service.ts";

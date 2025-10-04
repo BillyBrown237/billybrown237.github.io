@@ -1,17 +1,27 @@
-export interface User {
-    uuid: string
-    username: string
-    first_name: string
-    last_name: string
-    email: string | null
-    role: string
-    bio: string | null
-    profileImageUrl: string | null
-    resumeUrl: string | null
-    socials: Record<string, string> | null
-    createdAt: string
-    updatedAt: string
-}
+// Auth types
+export * from "./auth.types"
+
+// Certification types
+export * from "./certification.types"
+
+// // Project types
+// export * from "./project.types"
+//
+// // Experience types
+// export * from "./experience.types"
+//
+// // Skill types
+// export * from "./skill.types"
+//
+// // Testimonial types
+// export * from "./testimonial.types"
+//
+// // Message types
+// export * from "./message.types"
+
+
+
+
 
 export interface LoginError {
     error: string

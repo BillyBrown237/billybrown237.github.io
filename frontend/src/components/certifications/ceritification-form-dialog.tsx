@@ -3,7 +3,7 @@
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import * as z from "zod"
-import {type Certification} from "@/types/certificate.ts"
+import {type Certification} from "@/types/certification.types.ts"
 import {
     Dialog,
     DialogContent,
