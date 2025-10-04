@@ -19,11 +19,3 @@ export interface CreateCertificationDto {
 
 export type UpdateCertificationDto = Partial<CreateCertificationDto>
 
-export interface CertificationsResponse {
-    certifications: Certification[]
-}
-
-export interface CertificationResponse {
-    certification: Certification
-}
-

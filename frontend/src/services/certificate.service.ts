@@ -1,18 +1,16 @@
 import { apiClient } from "@/lib/axios"
 import type {
     Certification,
-    CertificationsResponse,
-    CertificationResponse,
     CreateCertificationDto,
     UpdateCertificationDto,
-} from "@/types"
+} from "@/types/certificate"
 
 export const certificationService = {
     // Get all certifications
     getAll: async (): Promise<Certification[]> => {
         try {
-            const { data } = await apiClient.get<CertificationsResponse>("/certifications")
-            return data.certifications
+            const { data } = await apiClient.get<Certification[]>("/certifications")
+            return data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to fetch certifications")
         }
@@ -21,8 +19,8 @@ export const certificationService = {
     // Get single certification
     getById: async (uuid: string): Promise<Certification> => {
         try {
-            const { data } = await apiClient.get<CertificationResponse>(`/certifications/${uuid}`)
-            return data.certification
+            const { data } = await apiClient.get<Certification>(`/certifications/${uuid}`)
+            return data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to fetch certification")
         }
@@ -31,8 +29,8 @@ export const certificationService = {
     // Create certification
     create: async (dto: CreateCertificationDto): Promise<Certification> => {
         try {
-            const { data } = await apiClient.post<CertificationResponse>("/certifications", dto)
-            return data.certification
+            const { data } = await apiClient.post<Certification>("/certifications", dto)
+            return data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to create certification")
         }
@@ -41,8 +39,8 @@ export const certificationService = {
     // Update certification
     update: async (uuid: string, dto: UpdateCertificationDto): Promise<Certification> => {
         try {
-            const { data } = await apiClient.patch<CertificationResponse>(`/certifications/${uuid}`, dto)
-            return data.certification
+            const { data } = await apiClient.patch<Certification>(`/certifications/${uuid}`, dto)
+            return data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to update certification")
         }

@@ -51,21 +51,11 @@ export function CertificationFormDialog({
                                             isLoading,
                                         }: CertificationFormDialogProps) {
     const form = useForm<CertificationFormValues>({
-        resolver: zodResolver(certificationSchema),
-        defaultValues: certification
-            ? {
-                name: certification.name,
-                issuer: certification.issuer,
-                dateIssued: certification.dateIssued.split("T")[0],
-                status: certification.status,
-            }
-            : {
-                name: "",
-                issuer: "",
-                dateIssued: "",
-                status: "COMPLETED",
-            },
-    })
+        resolver: zodResolver(certificationSchema)})
+    form.setValue("name", certification?.name || "");
+    form.setValue("issuer", certification?.issuer || "");
+    form.setValue("dateIssued", certification ? certification.dateIssued.split("T")[0] : "");
+    form.setValue("status", certification?.status || "COMPLETED");
 
     const handleSubmit = (data: CertificationFormValues) => {
         onSubmit(data)
