@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
+    <script src="./index.js"></script>
 </head>
 <body>
 
@@ -86,28 +87,5 @@
     <p class="footer">building in the open · <span>Douala, CM</span></p>
 
 </div>
-
-<script>
-    const html = document.documentElement;
-    const icon = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-
-    // Detect system preference on first load
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const saved = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
-    setTheme(saved);
-
-    function setTheme(t) {
-        html.setAttribute('data-theme', t);
-        icon.textContent = t === 'dark' ? '🌙' : '☀️';
-        label.textContent = t;
-        localStorage.setItem('theme', t);
-    }
-
-    function toggleTheme() {
-        const current = html.getAttribute('data-theme');
-        setTheme(current === 'dark' ? 'light' : 'dark');
-    }
-</script>
 </body>
 </html>
