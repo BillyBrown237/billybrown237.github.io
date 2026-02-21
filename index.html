@@ -4,10 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Billy Brown · Developer</title>
+
+    <!-- SEO -->
+    <meta name="description" content="Billy Brown — Frontend-first developer. Angular, React, Next.js, Node.js, NestJS and learning C#." />
+    <meta name="author" content="Billy Brown" />
+
+    <!-- OG / Social sharing -->
+    <meta property="og:title" content="Billy Brown · Developer" />
+    <meta property="og:description" content="Frontend-first developer with a soft spot for beautiful interfaces." />
+    <meta property="og:url" content="https://billybrown237.github.io" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Billy Brown · Developer" />
+    <meta name="twitter:description" content="Frontend-first developer with a soft spot for beautiful interfaces." />
+    <meta name="twitter:site" content="@dekoubrown" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>" />
+
+    <!-- Apply theme before paint to avoid flash -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved || preferred);
+        })();
+    </script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css" />
-    <script src="./index.js"></script>
 </head>
 <body>
 
@@ -17,7 +48,7 @@
 <div class="container">
 
     <div class="toggle-wrap">
-        <button class="toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+        <button class="toggle-btn" onclick="toggleTheme()" aria-label="Switch to light mode" id="themeToggle">
             <span class="toggle-icon" id="themeIcon">🌙</span>
             <span id="themeLabel">dark</span>
         </button>
@@ -29,6 +60,7 @@
         </div>
         <h1>Billy Brown</h1>
         <p class="handle">@billybrown237</p>
+        <div class="badge"><span class="badge-dot"></span> Available for work</div>
         <p class="bio">
             Frontend-first developer with a soft spot for beautiful interfaces.<br>
             Currently crossing over to C# to craft full-stack systems that actually scale.
@@ -46,7 +78,7 @@
 
     <div class="links">
 
-        <a href="https://your-portfolio.com" class="link-card" target="_blank" rel="noopener">
+        <a href="https://your-portfolio.com" class="link-card featured" target="_blank" rel="noopener" aria-label="Visit Billy Brown's portfolio">
             <span class="link-icon">🌐</span>
             <div class="link-info">
                 <div class="link-label">Portfolio</div>
@@ -55,7 +87,7 @@
             <span class="link-arrow">→</span>
         </a>
 
-        <a href="https://github.com/billybrown237" class="link-card" target="_blank" rel="noopener">
+        <a href="https://github.com/billybrown237" class="link-card" target="_blank" rel="noopener" aria-label="Visit Billy Brown on GitHub">
             <span class="link-icon">🐙</span>
             <div class="link-info">
                 <div class="link-label">GitHub</div>
@@ -64,7 +96,7 @@
             <span class="link-arrow">→</span>
         </a>
 
-        <a href="https://linkedin.com/in/your-handle" class="link-card" target="_blank" rel="noopener">
+        <a href="https://linkedin.com/in/your-handle" class="link-card" target="_blank" rel="noopener" aria-label="Visit Billy Brown on LinkedIn">
             <span class="link-icon">💼</span>
             <div class="link-info">
                 <div class="link-label">LinkedIn</div>
@@ -73,7 +105,7 @@
             <span class="link-arrow">→</span>
         </a>
 
-        <a href="https://twitter.com/your-handle" class="link-card" target="_blank" rel="noopener">
+        <a href="https://twitter.com/your-handle" class="link-card" target="_blank" rel="noopener" aria-label="Visit Billy Brown on Twitter / X">
             <span class="link-icon">𝕏</span>
             <div class="link-info">
                 <div class="link-label">Twitter / X</div>
@@ -87,5 +119,8 @@
     <p class="footer">building in the open · <span>Douala, CM</span></p>
 
 </div>
+
+<!-- Scripts -->
+<script src="main.js"></script>
 </body>
 </html>

@@ -2,16 +2,19 @@ const html = document.documentElement;
 const icon = document.getElementById('themeIcon');
 const label = document.getElementById('themeLabel');
 
-// Detect system preference on first load
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const saved = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
-setTheme(saved);
+// Sync UI to whatever theme was applied before paint
+const current = html.getAttribute('data-theme');
+setTheme(current);
 
 function setTheme(t) {
     html.setAttribute('data-theme', t);
     icon.textContent = t === 'dark' ? '🌙' : '☀️';
     label.textContent = t;
     localStorage.setItem('theme', t);
+    document.getElementById('themeToggle').setAttribute(
+        'aria-label',
+        `Switch to ${t === 'dark' ? 'light' : 'dark'} mode`
+    );
 }
 
 function toggleTheme() {
