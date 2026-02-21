@@ -84,12 +84,7 @@ export class User {
     },
   })
   @Column({ type: 'json', nullable: true })
-  socials?: {
-    github?: string;
-    linkedin?: string;
-    twitter?: string;
-    instagram?: string;
-  };
+  socials?: Record<string, string> | null;
 
   @CreateDateColumn()
   createdAt: Date;

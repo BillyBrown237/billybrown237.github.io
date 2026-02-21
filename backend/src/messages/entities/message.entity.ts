@@ -17,8 +17,14 @@ export class Message {
   @Column()
   email: string;
 
+  @Column()
+  subject: string;
+
   @Column({ type: 'text' })
   content: string;
+
+  @Column({ type: 'boolean', nullable: false })
+  read: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

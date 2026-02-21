@@ -12,7 +12,7 @@ export class Experience {
   uuid: string;
 
   @Column({ type: 'varchar', length: 200 })
-  title: string;
+  position: string;
 
   @Column({ type: 'varchar', length: 200 })
   company: string;

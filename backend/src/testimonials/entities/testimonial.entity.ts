@@ -15,7 +15,19 @@ export class Testimonial {
   name: string;
 
   @Column()
+  position?: string;
+
+  @Column()
+  company?: string;
+
+  @Column()
   message: string;
+
+  @Column()
+  imageUrl?: string;
+
+  @Column()
+  rating: number;
 
   @CreateDateColumn()
   createdAt: Date;
