@@ -2,6 +2,12 @@
 
 Personal link-in-bio page hosted on GitHub Pages — a single entry point to everything I'm building and everywhere I am online.
 
+## Preview
+
+| Desktop                          | Mobile                         |
+|----------------------------------|--------------------------------|
+| ![Desktop](./assets/desktop.png) | ![Mobile](./assets/mobile.png) |
+
 ## What's here
 
 A minimal, custom-built link hub with:
