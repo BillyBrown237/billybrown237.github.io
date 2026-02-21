@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Billy Brown · Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="container">
+
+    <div class="toggle-wrap">
+        <button class="toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+            <span class="toggle-icon" id="themeIcon">🌙</span>
+            <span id="themeLabel">dark</span>
+        </button>
+    </div>
+
+    <div class="header">
+        <div class="avatar-ring">
+            <div class="avatar">BB</div>
+        </div>
+        <h1>Billy Brown</h1>
+        <p class="handle">@billybrown237</p>
+        <p class="bio">
+            Frontend-first developer with a soft spot for beautiful interfaces.<br>
+            Currently crossing over to C# to craft full-stack systems that actually scale.
+        </p>
+    </div>
+
+    <div class="tags">
+        <span class="tag">Angular</span>
+        <span class="tag">React</span>
+        <span class="tag">Next.js</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">NestJS</span>
+        <span class="tag">C# · learning</span>
+    </div>
+
+    <div class="links">
+
+        <a href="https://your-portfolio.com" class="link-card" target="_blank" rel="noopener">
+            <span class="link-icon">🌐</span>
+            <div class="link-info">
+                <div class="link-label">Portfolio</div>
+                <div class="link-sub">Work, projects & experiments</div>
+            </div>
+            <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://github.com/billybrown237" class="link-card" target="_blank" rel="noopener">
+            <span class="link-icon">🐙</span>
+            <div class="link-info">
+                <div class="link-label">GitHub</div>
+                <div class="link-sub">Code I've written & things I've broken</div>
+            </div>
+            <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://linkedin.com/in/your-handle" class="link-card" target="_blank" rel="noopener">
+            <span class="link-icon">💼</span>
+            <div class="link-info">
+                <div class="link-label">LinkedIn</div>
+                <div class="link-sub">Professional stuff</div>
+            </div>
+            <span class="link-arrow">→</span>
+        </a>
+
+        <a href="https://twitter.com/your-handle" class="link-card" target="_blank" rel="noopener">
+            <span class="link-icon">𝕏</span>
+            <div class="link-info">
+                <div class="link-label">Twitter / X</div>
+                <div class="link-sub">Thoughts, dev takes & random stuff</div>
+            </div>
+            <span class="link-arrow">→</span>
+        </a>
+
+    </div>
+
+    <p class="footer">building in the open · <span>Douala, CM</span></p>
+
+</div>
+
+<script>
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+
+    // Detect system preference on first load
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const saved = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+    setTheme(saved);
+
+    function setTheme(t) {
+        html.setAttribute('data-theme', t);
+        icon.textContent = t === 'dark' ? '🌙' : '☀️';
+        label.textContent = t;
+        localStorage.setItem('theme', t);
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+</script>
+</body>
+</html>
